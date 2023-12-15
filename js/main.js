@@ -31,15 +31,12 @@ const updateCard = function(item, gePrice, itemN){
     let {itemImg, itemName, itemDescription, price, priceHigh, priceLow} = {
         itemImg: document.getElementById('itemImg'),
         itemName: document.getElementById('itemName'),
-        itemDescription: document.getElementById('itemDescription'),
-        price: document.getElementById('price'),
         priceHigh: document.getElementById('priceHigh'),
         priceLow: document.getElementById('priceLow')
     }
 
     itemImg.src = `https://oldschool.runescape.wiki/images/${itemN.replace(/\s+/g, '_')}_detail.png`
     itemName.innerHTML = `${itemN}`
-    // itemDescription.innerHTML = `${item.examine}`
     priceHigh.innerHTML = `Average High: ${gePrice.data[item].high.toLocaleString()} gp`
     priceLow.innerHTML = `Average Low: ${gePrice.data[item].low.toLocaleString()} gp`
 
