@@ -14,30 +14,27 @@
 <body>
     <div class="container">
         <!-- Header -->
-        <h1 class="text-center m-5">Search Item</h1>
+        <h1 class="text-center m-5">OSRS Grand Exchange</h1>
 
         <!-- Search bar and submit -->
-        <div class="row text-center">
-            <form action="" id="geForm">
-                <label for="geItem">Search: </label>
-                <input type="text" id="geItem" name="geItem">
-                <input type="text" id="itemInput" placeholder="Type to search for items">
+        <div class="row text-center justify-content-center">
+            <form action="" id="geForm" class="col-4">
+                <input class="form-control form-control-lg" type="text" placeholder="Grand Exchange Items" id="itemInput" name="geItem">
                 <ul id="suggestions"></ul>
-                <input type="submit" value="Search">
+                <button class="btn-lg btn-primary" type="submit">Search</button>
             </form>
         </div>
 
         <!-- Returned information -->
         <div class="row justify-content-center m-5">
-            <div class="card mb-3" style="max-width: 540px;">
+            <div class="card mb-3" style="max-width: 540px; border: none;">
                 <div class="row g-0">
                   <div class="col-md-4">
-                    <img src="" class="img-fluid rounded-start" alt="..." id="itemImg">
+                    <img src="https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/001/375/072/datas/original.png" class="img-fluid rounded-start" alt="Not Found" id="itemImg">
                   </div>
                   <div class="col-md-8">
                     <div class="card-body">
                       <h5 class="card-title" id="itemName">Card title</h5>
-                      <p class="card-text" id="itemDescription">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
                       <li class="list-group-item" id="priceHigh">A second item</li>
                       <li class="list-group-item" id="priceLow">A third item</li>
                     </div>

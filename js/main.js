@@ -21,7 +21,7 @@ const searchItem = document.getElementById('geForm')
 
 searchItem.addEventListener('submit', async (event) => {
     event.preventDefault();
-    let item = event.target.geItem.value
+    let item = event.target.itemInput.value.charAt(0).toUpperCase() + event.target.itemInput.value.slice(1).toLowerCase();
     let itemId = await geItemAPI(item)
     let gePriceItem = await gePriceAPI(itemId)
     updateCard(itemId, gePriceItem, item)
@@ -84,7 +84,51 @@ document.addEventListener('DOMContentLoaded', function () {
 
         suggestedItems.forEach(([key, value]) => {
             const listItem = document.createElement('li');
-            listItem.textContent = `${key}: ${value}`;
+            listItem.textContent = `${key}`;
+            suggestionsList.appendChild(listItem);
+        });
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const itemInput = document.getElementById('itemInput');
+    const suggestionsList = document.getElementById('suggestions');
+
+    // Asynchronous function to load JSON data
+    async function loadItems() {
+        try {
+            const response = await fetch('https://oldschool.runescape.wiki/?title=Module:GEIDs/data.json&action=raw&ctype=application%2Fjson');
+            const itemsObject = await response.json();
+
+            itemInput.addEventListener('input', function () {
+                const userInput = itemInput.value.toLowerCase().trim();
+                const itemsArray = Object.entries(itemsObject);
+                const filteredItems = itemsArray.slice(2).filter(([key, value]) =>
+                    key.toString().toLowerCase().includes(userInput)
+                );
+                displaySuggestions(filteredItems.slice(0,10));
+            });
+        } catch (error) {
+            console.error('Error loading JSON:', error);
+        }
+    }
+
+    loadItems();
+
+    function displaySuggestions(suggestedItems) {
+        suggestionsList.innerHTML = '';
+
+        suggestedItems.forEach(([key, value]) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${key}`;
+            
+            // Add click event listener to fill in the input on click
+            listItem.addEventListener('click', function () {
+                itemInput.value = key;
+                suggestionsList.innerHTML = ''; // Clear suggestions after selecting one
+            });
+
             suggestionsList.appendChild(listItem);
         });
     }
