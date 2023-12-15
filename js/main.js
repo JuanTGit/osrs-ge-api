@@ -47,50 +47,6 @@ const updateCard = function(item, gePrice, itemN){
 }
 
 
-
-document.addEventListener('DOMContentLoaded', function () {
-    const itemInput = document.getElementById('itemInput');
-    const suggestionsList = document.getElementById('suggestions');
-
-    // Asynchronous function to load JSON data
-    async function loadItems() {
-        try {
-            const response = await fetch('https://oldschool.runescape.wiki/?title=Module:GEIDs/data.json&action=raw&ctype=application%2Fjson');
-            const itemsObject = await response.json();
-
-            itemInput.addEventListener('input', function () {
-                const userInput = itemInput.value.toLowerCase().trim();
-
-                // Convert the object to an array of key-value pairs
-                const itemsArray = Object.entries(itemsObject);
-
-                // Filter based on values
-                const filteredItems = itemsArray.filter(([key, value]) =>
-                    key.toString().toLowerCase().includes(userInput)
-                );
-
-                // Display suggestions
-                displaySuggestions(filteredItems);
-            });
-        } catch (error) {
-            console.error('Error loading JSON:', error);
-        }
-    }
-
-    loadItems();
-
-    function displaySuggestions(suggestedItems) {
-        suggestionsList.innerHTML = '';
-
-        suggestedItems.forEach(([key, value]) => {
-            const listItem = document.createElement('li');
-            listItem.textContent = `${key}`;
-            suggestionsList.appendChild(listItem);
-        });
-    }
-});
-
-
 document.addEventListener('DOMContentLoaded', function () {
     const itemInput = document.getElementById('itemInput');
     const suggestionsList = document.getElementById('suggestions');
@@ -122,6 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
         suggestedItems.forEach(([key, value]) => {
             const listItem = document.createElement('li');
             listItem.textContent = `${key}`;
+            listItem.classList.add('list-group-item')
             
             // Add click event listener to fill in the input on click
             listItem.addEventListener('click', function () {
