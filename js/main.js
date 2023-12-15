@@ -28,7 +28,7 @@ searchItem.addEventListener('submit', async (event) => {
 })
 
 const updateCard = function(item, gePrice, itemN){
-    let {itemImg, itemName, itemDescription, price, priceHigh, priceLow} = {
+    let {itemImg, itemName, priceHigh, priceLow} = {
         itemImg: document.getElementById('itemImg'),
         itemName: document.getElementById('itemName'),
         priceHigh: document.getElementById('priceHigh'),
@@ -37,8 +37,8 @@ const updateCard = function(item, gePrice, itemN){
 
     itemImg.src = `https://oldschool.runescape.wiki/images/${itemN.replace(/\s+/g, '_')}_detail.png`
     itemName.innerHTML = `${itemN}`
-    priceHigh.innerHTML = `Average High: ${gePrice.data[item].high.toLocaleString()} gp`
-    priceLow.innerHTML = `Average Low: ${gePrice.data[item].low.toLocaleString()} gp`
+    priceHigh.innerHTML = `Current High: ${gePrice.data[item].high.toLocaleString()} gp`
+    priceLow.innerHTML = `Current Low: ${gePrice.data[item].low.toLocaleString()} gp`
 
 
 }
@@ -72,10 +72,15 @@ document.addEventListener('DOMContentLoaded', function () {
     function displaySuggestions(suggestedItems) {
         suggestionsList.innerHTML = '';
 
-        suggestedItems.forEach(([key, value]) => {
+        suggestedItems.forEach(([key]) => {
             const listItem = document.createElement('li');
-            listItem.textContent = `${key}`;
-            listItem.classList.add('list-group-item')
+            const imageEl = document.createElement('img');
+            listItem.textContent = ` ${key}`;
+            imageEl.src = `https://oldschool.runescape.wiki/images/${key.replace(/\s+/g, '_')}_detail.png`;
+            imageEl.style.width = '35px';
+            imageEl.style.height = '35px';
+            listItem.insertBefore(imageEl, listItem.firstChild);
+            listItem.classList.add('list-group-item');
             
             // Add click event listener to fill in the input on click
             listItem.addEventListener('click', function () {
