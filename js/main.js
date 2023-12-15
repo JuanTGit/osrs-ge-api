@@ -1,7 +1,91 @@
-// console.log('Welcome to the general store!')
+console.log('Welcome to the general store!')
 
-const geAPI = async function(){
-    let response = await fetch('https://prices.runescape.wiki/api/v1/osrs/mapping')
-    let data = await response.json()
-    console.log(data[1].icon)
+
+// Grab Item ID from Item name input
+const geItemAPI = async function(itemName){
+    let information = await fetch('https://oldschool.runescape.wiki/?title=Module:GEIDs/data.json&action=raw&ctype=application%2Fjson')
+    let infoData = await information.json()
+    return await infoData[itemName]
 }
+console.log(geItemAPI('Acorn'))
+
+
+// Get Item Prices
+const gePriceAPI = async function(itemId){
+    let prices = await fetch(`https://prices.runescape.wiki/api/v1/osrs/latest?id=${itemId}`)
+    let priceData = await prices.json()
+    return await priceData
+}
+
+const searchItem = document.getElementById('geForm')
+
+searchItem.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    let item = event.target.geItem.value
+    let itemId = await geItemAPI(item)
+    let gePriceItem = await gePriceAPI(itemId)
+    updateCard(itemId, gePriceItem, item)
+})
+
+const updateCard = function(item, gePrice, itemN){
+    let {itemImg, itemName, itemDescription, price, priceHigh, priceLow} = {
+        itemImg: document.getElementById('itemImg'),
+        itemName: document.getElementById('itemName'),
+        itemDescription: document.getElementById('itemDescription'),
+        price: document.getElementById('price'),
+        priceHigh: document.getElementById('priceHigh'),
+        priceLow: document.getElementById('priceLow')
+    }
+
+    itemImg.src = `https://oldschool.runescape.wiki/images/${itemN.replace(/\s+/g, '_')}_detail.png`
+    itemName.innerHTML = `${itemN}`
+    // itemDescription.innerHTML = `${item.examine}`
+    priceHigh.innerHTML = `Average High: ${gePrice.data[item].high.toLocaleString()} gp`
+    priceLow.innerHTML = `Average Low: ${gePrice.data[item].low.toLocaleString()} gp`
+
+
+}
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const itemInput = document.getElementById('itemInput');
+    const suggestionsList = document.getElementById('suggestions');
+
+    // Asynchronous function to load JSON data
+    async function loadItems() {
+        try {
+            const response = await fetch('https://oldschool.runescape.wiki/?title=Module:GEIDs/data.json&action=raw&ctype=application%2Fjson');
+            const itemsObject = await response.json();
+
+            itemInput.addEventListener('input', function () {
+                const userInput = itemInput.value.toLowerCase().trim();
+
+                // Convert the object to an array of key-value pairs
+                const itemsArray = Object.entries(itemsObject);
+
+                // Filter based on values
+                const filteredItems = itemsArray.filter(([key, value]) =>
+                    key.toString().toLowerCase().includes(userInput)
+                );
+
+                // Display suggestions
+                displaySuggestions(filteredItems);
+            });
+        } catch (error) {
+            console.error('Error loading JSON:', error);
+        }
+    }
+
+    loadItems();
+
+    function displaySuggestions(suggestedItems) {
+        suggestionsList.innerHTML = '';
+
+        suggestedItems.forEach(([key, value]) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${key}: ${value}`;
+            suggestionsList.appendChild(listItem);
+        });
+    }
+});
