@@ -25,6 +25,17 @@ const gePriceAPI = async function(itemId){
 }
 
 const searchItem = document.getElementById('geForm')
+const searchItemSuggested = document.getElementsByName('suggestedItem')
+
+searchItemSuggested.forEach(element => {
+    element.addEventListener('click', async (event) => {
+        event.preventDefault();
+        let item = itemInput.value.charAt(0).toUpperCase() + itemInput.value.slice(1).toLowerCase();
+        let itemId = await geItemAPI(item);
+        let gePriceItem = await gePriceAPI(itemId);
+        updateCard(itemId, gePriceItem, item);
+    });
+});
 
 searchItem.addEventListener('submit', async (event) => {
     event.preventDefault();
